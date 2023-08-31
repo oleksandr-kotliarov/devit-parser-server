@@ -1,0 +1,425 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Article Parser",
+    "version": "v1",
+    "contact": {
+      "email": "de.fr09n@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Codes"
+    },
+    {
+      "name": "Articles"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new admin",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdmin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful registration"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "description": "",
+        "responses": {
+          "204": {
+            "description": "Successful logout"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "summary": "Refresh tokens",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Successful refresh"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/codes": {
+      "post": {
+        "summary": "Create registration code for admin",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Code has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Code"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Codes"
+        ]
+      }
+    },
+    "/api/articles": {
+      "get": {
+        "summary": "Get articles",
+        "description": "",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Number of a page"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Limit of articles on the page"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Sort by (one of article fiels)"
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Order of sorting (1 - asc, -1 - desc)"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Search for matches in the text"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Articles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Articles"
+        ]
+      },
+      "post": {
+        "summary": "Create article",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Article"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Article has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Articles"
+        ]
+      },
+      "patch": {
+        "summary": "Update article",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateArticle"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Article has been updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Articles"
+        ]
+      },
+      "delete": {
+        "summary": "Delete article",
+        "description": "",
+        "responses": {
+          "204": {
+            "description": "Article has been deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Articles"
+        ]
+      }
+    },
+    "/api/articles/parse": {
+      "post": {
+        "summary": "Parse articles from rss source",
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParseLink"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Articles has been parsed"
+          }
+        },
+        "tags": [
+          "Articles"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateAdmin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Code": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "pubDate": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "guid": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateArticle": {
+        "type": "object",
+        "required": [
+          "_id"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "pubDate": {
+            "type": "string"
+          },
+          "creator": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "guid": {
+            "type": "string"
+          }
+        }
+      },
+      "ArticleResponse": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 1
+          },
+          "page": {
+            "type": "integer",
+            "example": 1
+          },
+          "limit": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "ParseLink": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
