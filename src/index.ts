@@ -59,3 +59,5 @@ const StartServer = () => {
 };
 
 StartServer();
+
+export default app;
